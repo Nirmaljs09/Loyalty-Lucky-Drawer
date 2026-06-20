@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Litro Lucky Draw</title>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align:center;
+    background:#f4f4f4;
+}
+h1{
+    color:#0066cc;
+}
+#wheel{
+    width:400px;
+    height:400px;
+    border-radius:50%;
+    border:8px solid #333;
+    margin:20px auto;
+    position:relative;
+    transition:transform 5s ease-out;
+    background:conic-gradient(
+        #ffcc00 0deg 60deg,
+        #ff6666 60deg 120deg,
+        #66cc66 120deg 180deg,
+        #66b3ff 180deg 240deg,
+        #cc99ff 240deg 300deg,
+        #cccccc 300deg 360deg
+    );
+}
+.pointer{
+    width:0;
+    height:0;
+    border-left:20px solid transparent;
+    border-right:20px solid transparent;
+    border-top:40px solid red;
+    margin:auto;
+}
+button{
+    padding:12px 30px;
+    font-size:18px;
+    cursor:pointer;
+}
+#result{
+    font-size:24px;
+    font-weight:bold;
+    margin-top:20px;
+}
+.labels{
+    position:absolute;
+    width:100%;
+    height:100%;
+}
+.label{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform-origin:0 0;
+    font-size:14px;
+    font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<h1>🎡 Litro Lucky Draw</h1>
+
+<div class="pointer"></div>
+
+<div id="wheel">
+    <div class="labels">
+        <div class="label" style="transform:rotate(30deg) translate(120px)">Litro Cap</div>
+        <div class="label" style="transform:rotate(90deg) translate(120px)">Litro Apron</div>
+        <div class="label" style="transform:rotate(150deg) translate(120px)">Litro Hose</div>
+        <div class="label" style="transform:rotate(210deg) translate(120px)">Litro Regulator</div>
+        <div class="label" style="transform:rotate(270deg) translate(120px)">Litro Pack</div>
+        <div class="label" style="transform:rotate(330deg) translate(120px)">Try Again</div>
+    </div>
+</div>
+
+<button onclick="spinWheel()">SPIN</button>
+
+<div id="result"></div>
+
+<script>
+const prizes = [
+    "Litro Cap",
+    "Litro Apron",
+    "Litro Hose",
+    "Litro Regulator",
+    "Litro Pack",
+    "Try Again"
+];
+
+let currentRotation = 0;
+
+function spinWheel() {
+
+    let randomIndex = Math.floor(Math.random() * prizes.length);
+
+    let segment = 360 / prizes.length;
+    let extraRotation = 3600 + (360 - (randomIndex * segment + segment/2));
+
+    currentRotation += extraRotation;
+
+    document.getElementById("wheel").style.transform =
+        `rotate(${currentRotation}deg)`;
+
+    setTimeout(() => {
+        document.getElementById("result").innerHTML =
+            "🏆 Result: " + prizes[randomIndex];
+    }, 5000);
+}
+</script>
+
+</body>
+</html>
