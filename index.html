@@ -96,6 +96,7 @@ canvas{position:fixed;inset:0;pointer-events:none;z-index:110}
 .edit-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .edit-actions button{flex:1;background:#005bd8;color:#fff}
 .copy-box{width:100%;height:180px;margin-top:10px;border:1px solid #bddcff;border-radius:10px;padding:8px;font-size:12px;display:none}
+.edit-help{font-size:12px;line-height:1.35;color:#375f99;margin-top:8px;background:#eef7ff;border-radius:10px;padding:8px;font-weight:700}
 
 @media(max-width:560px){
   .page{padding:8px}.card{width:98vw;min-height:96vh;padding:10px 6px 14px;border-radius:22px}
@@ -157,8 +158,9 @@ canvas{position:fixed;inset:0;pointer-events:none;z-index:110}
 <div class="edit-panel" id="editPanel">
 <h3>Gift Live Position Control</h3><div id="editModeLabel">Mode: Desktop</div>
 <div id="editRows"></div>
-<div class="edit-actions"><button type="button" onclick="copyCSS()">Copy CSS</button><button type="button" onclick="resetGiftControls()">Reset</button></div>
+<div class="edit-actions"><button type="button" onclick="saveGiftControls()">Save</button><button type="button" onclick="downloadUpdatedSite()">Download Site</button><button type="button" onclick="closeEditPanel()">Close</button><button type="button" onclick="resetGiftControls()">Reset</button></div>
 <textarea id="copyBox" class="copy-box" readonly></textarea>
+<div class="edit-help">Save = this phone/browser only. Download Site = updated index.html. GitHub Pages එකේ index.html replace කරාම හැම phone එකෙන්ම new positions පේනවා.</div>
 </div>
 
 <script>
@@ -210,8 +212,12 @@ function animateConfetti(){ctx.clearRect(0,0,c.width,c.height);confetti.forEach(
   function keyFor(item,prop){if(prop==="box")return prefix()+"gift-box";return prefix()+item+"-"+prop}
   function num(v){return parseFloat(String(v).replace("%",""))||0}
   function getVar(name){return getComputedStyle(document.documentElement).getPropertyValue("--"+name).trim()||defaults[name]||"0"}
-  function setVar(name,value){document.documentElement.style.setProperty("--"+name,value);localStorage.setItem("litro-"+name,value)}
+  function setVar(name,value){document.documentElement.style.setProperty("--"+name,value)}
+  function saveAllToLocal(){Object.keys(defaults).forEach(k=>localStorage.setItem("litro-"+k,getVar(k)))}
   function loadSaved(){Object.keys(defaults).forEach(k=>{const v=localStorage.getItem("litro-"+k);if(v)document.documentElement.style.setProperty("--"+k,v)});updateModeLabel()}
+  window.saveGiftControls=function(){saveAllToLocal();alert("Saved on this phone/browser. හැම phone එකටම update වෙන්න Download Site කරලා GitHub Pages එකේ index.html replace කරන්න.")};
+  window.closeEditPanel=function(){document.getElementById("editPanel").classList.remove("show")};
+  window.downloadUpdatedSite=function(){saveAllToLocal();Object.keys(defaults).forEach(k=>document.documentElement.style.setProperty("--"+k,getVar(k)));const html="<!DOCTYPE html>\n"+document.documentElement.outerHTML;const blob=new Blob([html],{type:"text/html;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="index.html";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);alert("Updated index.html downloaded. GitHub repo එකේ old index.html replace කරලා upload/commit කරන්න.")};
   function updateModeLabel(){const label=document.getElementById("editModeLabel");if(label)label.textContent=isMobileMode()?"Mode: Mobile (mobile values editing)":"Mode: Desktop (desktop values editing)"}
   window.giftMove=function(item,axis,step){const key=keyFor(item,axis);setVar(key,(num(getVar(key))+step).toFixed(1)+"%")};
   window.giftResize=function(item,step){const key=keyFor(item,"size");const current=parseFloat(getVar(key))||1;setVar(key,Math.max(.25,current+step).toFixed(2))};
@@ -225,7 +231,7 @@ function animateConfetti(){ctx.clearRect(0,0,c.width,c.height);confetti.forEach(
     if(footerCredit){
       footerCredit.addEventListener("click",()=>{
         const pw=prompt("Enter password");
-        if(pw==="0815"){
+        if(pw==="19722"){
           updateModeLabel();
           document.getElementById("editPanel").classList.toggle("show");
         }else if(pw!==null){
