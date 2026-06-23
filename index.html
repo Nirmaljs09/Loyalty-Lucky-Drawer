@@ -200,7 +200,7 @@ function generateGiftCode(giftName){
 }
 
 function sendGiftToWhatsApp(gift,code){
-  const message=`🎉 Litro Loyalty Lucky Draw%0A%0AGift : ${gift}%0ACode : ${code}%0ATicket : ${ticketId}`;
+  const message=`🎉 Litro Loyalty Lucky Draw%0A%0ACode : ${code}%0ATicket : ${ticketId}`;
   const url=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   window.open(url,"_blank");
 }
@@ -228,7 +228,7 @@ function spinWheel(){
     }
     else{
       const giftCode=generateGiftCode(p.name);
-      winImg.src=p.img;winImg.style.display="block";modalTitle.textContent="CONGRATULATIONS!";winName.textContent=p.name+" | Code: "+giftCode;note.textContent="Result: "+p.name+" | Code: "+giftCode;blastConfetti();
+      winImg.src=p.img;winImg.style.display="block";modalTitle.textContent="CONGRATULATIONS!";winName.textContent=p.name;note.textContent="Result: "+p.name;blastConfetti();
       if(waBtn){waBtn.style.display="inline-flex";waBtn.onclick=(e)=>{e.stopPropagation();sendGiftToWhatsApp(p.name,giftCode);};}
       if(ssNote)ssNote.style.display="block";
       lockSpin();
